@@ -18,7 +18,7 @@ import com.example.duhuihui.pulltorefreshrecyclerview.R;
 
 
 /**
- * Created by zyx on 16-7-12.
+ * Created by dhh on 16-10-15
  */
 public class PulltoRefreshRecyclerView extends LinearLayout {
     /**
