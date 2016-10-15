@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements PulltoRefreshRecy
         refreshRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
         refreshRecyclerView.setRefreshLoadMoreListener(this);
         adapter = new MyAdapter(list);
+        //111111111
         refreshRecyclerView.setAdapter(adapter);
     }
 
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements PulltoRefreshRecy
             @Override
             public void run() {
                 SystemClock.sleep(2000);
+                //44444444444
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
