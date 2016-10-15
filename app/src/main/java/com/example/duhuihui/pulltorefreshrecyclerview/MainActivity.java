@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements PulltoRefreshRecy
         refreshRecyclerView.setRefreshLoadMoreListener(this);
         adapter = new MyAdapter(list);
         //111111111
+        //扫地
         refreshRecyclerView.setAdapter(adapter);
     }
 
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements PulltoRefreshRecy
             @Override
             public void run() {
                 SystemClock.sleep(2000);
-                //44444444444
+                //dd
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
