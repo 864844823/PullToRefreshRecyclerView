@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements PulltoRefreshRecy
         refreshRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
         refreshRecyclerView.setRefreshLoadMoreListener(this);
         adapter = new MyAdapter(list);
+        //阿三的发生地方阿斯蒂芬阿斯蒂芬
+        //阿三的发生地方阿萨德发他让我
         refreshRecyclerView.setAdapter(adapter);
     }
 
