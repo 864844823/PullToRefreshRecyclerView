@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements PulltoRefreshRecy
         refreshRecyclerView.setRefreshLoadMoreListener(this);
         adapter = new MyAdapter(list);
         //扫地
+        //sdfsadf
         refreshRecyclerView.setAdapter(adapter);
     }
 
