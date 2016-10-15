@@ -27,8 +27,6 @@ public class MainActivity extends AppCompatActivity implements PulltoRefreshRecy
         refreshRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
         refreshRecyclerView.setRefreshLoadMoreListener(this);
         adapter = new MyAdapter(list);
-        adapter = new MyAdapter(list);
-        adapter = new MyAdapter(list);
         refreshRecyclerView.setAdapter(adapter);
     }
 
