@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,8 +67,8 @@ public class PulltoRefreshRecyclerView extends LinearLayout {
      */
     private boolean isLoadMore = false;
     private RecyclerView.LayoutManager layoutManager = null;
-    public TextView textView;
     private RecyclerView.Adapter adapter;
+    private int mItemCount;
 
     public PulltoRefreshRecyclerView(Context context) {
         this(context, null);
@@ -77,12 +78,13 @@ public class PulltoRefreshRecyclerView extends LinearLayout {
     //    @SuppressWarnings("deprecation")
     public PulltoRefreshRecyclerView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        // 导入布局
-        LayoutInflater.from(context).inflate(
-                R.layout.recyclerview_pull_to_refersh, this, true);
-        swipeRfl = (SwipeRefreshLayout) findViewById(R.id.srl_pull_to_refresh);
-        recyclerView = (RecyclerView) findViewById(R.id.rcv_pull_to_refresh);
-        textView = (TextView) findViewById(R.id.tv_more);
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        swipeRfl = new SwipeRefreshLayout(context);
+        swipeRfl.setLayoutParams(layoutParams);
+        recyclerView = new RecyclerView(context);
+        recyclerView.setLayoutParams(layoutParams);
+        swipeRfl.addView(recyclerView);
+        addView(swipeRfl);
         // 加载颜色是循环播放的，只要没有完成刷新就会一直循环，color1>color2>color3>color4
         swipeRfl.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE,
                 Color.YELLOW);
@@ -111,8 +113,9 @@ public class PulltoRefreshRecyclerView extends LinearLayout {
                  * 无论水平还是垂直
                  */
                 if (hasMore && (lastVisibleItem >= totalItemCount - 1)
-                        && !isLoadMore) {
+                        && !isLoadMore && !isRefresh) {
                     isLoadMore = true;
+                    swipeRfl.setEnabled(false);
                     loadMore();
                 }
 
@@ -126,7 +129,7 @@ public class PulltoRefreshRecyclerView extends LinearLayout {
 
             @Override
             public void onRefresh() {
-                if (!isRefresh) {
+                if (!isRefresh && !isLoadMore) {
                     isRefresh = true;
                     refresh();
                 }
@@ -208,28 +211,23 @@ public class PulltoRefreshRecyclerView extends LinearLayout {
     public void loadMore() {
         if (mRefreshLoadMoreListner != null && hasMore) {
             mRefreshLoadMoreListner.onLoadMore();
-            textView.setVisibility(VISIBLE);
-            swipeRfl.setRefreshing(true);
         }
     }
 
     /**
      * 加载更多完毕,为防止频繁网络请求,isLoadMore为false才可再次请求更多数据
-     *
      * 将RecyclerView的可见条目移动到刷新出的了第一个条目上
-     * @param position
      */
-    public void setLoadMoreCompleted(int position) {
+    public void setLoadMoreCompleted() {
         isLoadMore = false;
-        swipeRfl.setRefreshing(false);
-        textView.setVisibility(INVISIBLE);
-        if(position==adapter.getItemCount()) {
-            Toast.makeText(getContext(),"没有更多数据了！", Toast.LENGTH_SHORT).show();
+        swipeRfl.setEnabled(true);
+        adapter.notifyDataSetChanged();
+        if (mItemCount == adapter.getItemCount()) {
+            Toast.makeText(getContext(), "没有更多数据了！", Toast.LENGTH_SHORT).show();
             setPullLoadMoreEnable(false);
-        }
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-            recyclerView.smoothScrollToPosition(position);
+        } else {
+//            recyclerView.smoothScrollToPosition(mItemCount);
+            mItemCount = adapter.getItemCount();
         }
     }
 
@@ -239,6 +237,7 @@ public class PulltoRefreshRecyclerView extends LinearLayout {
         setPullLoadMoreEnable(true);
         if (adapter != null) {
             adapter.notifyDataSetChanged();
+            mItemCount = adapter.getItemCount();
         }
     }
 
@@ -256,6 +255,7 @@ public class PulltoRefreshRecyclerView extends LinearLayout {
         this.adapter = adapter;
         if (adapter != null)
             recyclerView.setAdapter(adapter);
+        mItemCount = adapter.getItemCount();
     }
 
     public interface RefreshLoadMoreListener {

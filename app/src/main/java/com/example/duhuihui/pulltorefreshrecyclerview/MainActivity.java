@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements PulltoRefreshRecy
 
     @Override
     public void onLoadMore() {
-        final int size = list.size();
         initData();
         new Thread(new Runnable() {
             @Override
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements PulltoRefreshRecy
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        refreshRecyclerView.setLoadMoreCompleted(size);
+                        refreshRecyclerView.setLoadMoreCompleted();
                         System.out.println("加载更多:size=" + list.size());
 
                     }
